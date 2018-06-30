@@ -1,0 +1,1654 @@
+---
+title: "Shell Script"
+author: "Dookyung Kim"
+date: "2018-05-06"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+exclude: true
+
+```{r, message=FALSE, warning=FALSE, include=FALSE}
+options(
+  htmltools.dir.version = FALSE, # for blogdown
+  width=80
+)
+
+knitr::opts_chunk$set(engine.path = list(
+  bash = 'C:/Program Files/Git/git-bash'
+))
+
+# library(emo)
+htmltools::tagList(rmarkdown::html_dependency_font_awesome())
+```
+
+---
+class: middle, center
+
+# Introducing the Shell
+
+
+
+---
+## The Shell
+
+A shell is a program like any other. What’s special about it is that its job is to run other programs rather than to do calculations itself. The most popular Unix shell is Bash.Bash is the default shell on most modern implementations of Unix and in most packages that provide Unix-like tools for Windows.
+
+### How to install:
+
+Git을 설치하면 Bash 프로그램이 자동으로 설치됨
+Window PC에서 왼쪽 하단에 위도우 버튼 클릭하고 `Git Bash`를 검색하여 실행
+
+---
+
+## What does it look like?
+
+A typical shell window looks something like:
+
+```{r echo=FALSE}
+knitr::include_graphics("imgs/Git_bash.png")
+```
+
+---
+
+## Bash Command
+
+
+check contents in the current working folders:
+
+```{bash, eval=FALSE}
+ls
+```
+
+typical command structure: a command, some flags (also called Options or switches) and an argument.
+
+Flag start with a single dash(-) or two dashes(--), and change the behavior of a command. 
+
+Arguments tell the command what to operate on (e.g. files and directories). Sometimes flags and arguments are referred to as parameters. A command can be called with more than one flag and more than one argument: but a command doesn’t always require an argument or a flag.
+
+```{bash, eval=FALSE}
+ls -F /
+```
+
+---
+
+### Is it difficult?
+
+With a command line interface (CLI) the choices are combinations of commands and parameters, more like words in a language than buttons on a screen. They are not presented to you so you must learn a few, like learning some vocabulary in a new language. But a small number of commands gets you a long way, and we’ll cover those essential few today.
+
+<br/>
+
+### Flexibility and automation
+The grammar of a shell allows you to combine existing tools into powerful pipelines and handle large volumes of data automatically. Sequences of commands can be written into a script, improving the reproducibility of workflows and allowing you to repeat them easily.
+
+As clusters and cloud computing systems become more popular for scientific data crunching, being able to interact with the shell is becoming a necessary skill. 
+
+---
+## Key Points
+
+1. A shell is a program whose primary purpose is to read commands and run other programs.
+
+2. The shell’s main advantages are its high action-to-keystroke ratio, its support for automating repetitive tasks, and its capacity to access networked machines.
+
+3. The shell’s main disadvantages are its primarily textual nature and how cryptic its commands and operation can be.
+
+
+---
+class: middle
+
+# Navigating Files and Directories
+
+
+--- 
+
+
+---
+
+## pwd
+
+check current dictories:
+
+```{bash, eval=FALSE}
+pwd
+# /c/user/ncloud
+```
+
+---
+## Getting Help
+
+```{bash, eval=FALSE}
+ls --help   # for windows
+man ls      # for mac
+
+# Usage: ls [OPTION]... [FILE]...
+# List information about the FILEs (the current directory by default).
+# Sort entries alphabetically if none of -cftuvSUX nor --sort is specified.
+# 
+# Mandatory arguments to long options are mandatory for short options too.
+#   -a, --all                  do not ignore entries starting with .
+#   -A, --almost-all           do not list implied . and ..
+#       --author               with -l, print the author of each file
+#   -b, --escape               print C-style escapes for nongraphic characters
+#       --block-size=SIZE      scale sizes by SIZE before printing them; e.g.,
+#                                '--block-size=M' prints sizes in units of
+#                                1,048,576 bytes; see SIZE format below
+#   -B, --ignore-backups       do not list implied entries ending with ~
+#   -c                         with -lt: sort by, and show, ctime (time of last
+#                                modification of file status information);
+#                                with -l: show ctime and sort by name;
+#                                otherwise: sort by ctime, newest first
+#   -C                         list entries by columns
+#       --color[=WHEN]         colorize the output; WHEN can be 'always' (default
+#                                if omitted), 'auto', or 'never'; more info below
+#   -d, --directory            list directories themselves, not their contents
+#   -D, --dired                generate output designed for Emacs' dired mode
+#   -f                         do not sort, enable -aU, disable -ls --color
+#   -F, --classify             append indicator (one of */=>@|) to entries
+#       --file-type            likewise, except do not append '*'
+#       --format=WORD          across -x, commas -m, horizontal -x, long -l,
+#                                single-column -1, verbose -l, vertical -C
+#       --full-time            like -l --time-style=full-iso
+#   -g                         like -l, but do not list owner
+#       --group-directories-first
+#                              group directories before files;
+#                                can be augmented with a --sort option, but any
+#                                use of --sort=none (-U) disables grouping
+#   -G, --no-group             in a long listing, don't print group names
+#   -h, --human-readable       with -l and/or -s, print human readable sizes
+#                                (e.g., 1K 234M 2G)
+#       --si                   likewise, but use powers of 1000 not 1024
+#   -H, --dereference-command-line
+#                              follow symbolic links listed on the command line
+#       --dereference-command-line-symlink-to-dir
+#                              follow each command line symbolic link
+#                                that points to a directory
+#       --hide=PATTERN         do not list implied entries matching shell PATTERN
+#                                (overridden by -a or -A)
+#       --indicator-style=WORD  append indicator with style WORD to entry names:
+#                                none (default), slash (-p),
+#                                file-type (--file-type), classify (-F)
+#   -i, --inode                print the index number of each file
+#   -I, --ignore=PATTERN       do not list implied entries matching shell PATTERN
+#   -k, --kibibytes            default to 1024-byte blocks for disk usage
+#   -l                         use a long listing format
+#   -L, --dereference          when showing file information for a symbolic
+#                                link, show information for the file the link
+#                                references rather than for the link itself
+#   -m                         fill width with a comma separated list of entries
+#   -n, --numeric-uid-gid      like -l, but list numeric user and group IDs
+#   -N, --literal              print raw entry names (don't treat e.g. control
+#                                characters specially)
+#   -o                         like -l, but do not list group information
+#   -p, --indicator-style=slash
+#                              append / indicator to directories
+#   -q, --hide-control-chars   print ? instead of nongraphic characters
+#       --show-control-chars   show nongraphic characters as-is (the default,
+#                                unless program is 'ls' and output is a terminal)
+#   -Q, --quote-name           enclose entry names in double quotes
+#       --quoting-style=WORD   use quoting style WORD for entry names:
+#                                literal, locale, shell, shell-always,
+#                                shell-escape, shell-escape-always, c, escape
+#   -r, --reverse              reverse order while sorting
+#   -R, --recursive            list subdirectories recursively
+#   -s, --size                 print the allocated size of each file, in blocks
+#   -S                         sort by file size, largest first
+#       --sort=WORD            sort by WORD instead of name: none (-U), size (-S),
+#                                time (-t), version (-v), extension (-X)
+#       --time=WORD            with -l, show time as WORD instead of default
+#                                modification time: atime or access or use (-u);
+#                                ctime or status (-c); also use specified time
+#                                as sort key if --sort=time (newest first)
+#       --time-style=STYLE     with -l, show times using style STYLE:
+#                                full-iso, long-iso, iso, locale, or +FORMAT;
+#                                FORMAT is interpreted like in 'date'; if FORMAT
+#                                is FORMAT1<newline>FORMAT2, then FORMAT1 applies
+#                                to non-recent files and FORMAT2 to recent files;
+#                                if STYLE is prefixed with 'posix-', STYLE
+#                                takes effect only outside the POSIX locale
+#   -t                         sort by modification time, newest first
+#   -T, --tabsize=COLS         assume tab stops at each COLS instead of 8
+#   -u                         with -lt: sort by, and show, access time;
+#                                with -l: show access time and sort by name;
+#                                otherwise: sort by access time, newest first
+#   -U                         do not sort; list entries in directory order
+#   -v                         natural sort of (version) numbers within text
+#   -w, --width=COLS           set output width to COLS.  0 means no limit
+#   -x                         list entries by lines instead of by columns
+#   -X                         sort alphabetically by entry extension
+#   -Z, --context              print any security context of each file
+#   -1                         list one file per line.  Avoid '\n' with -q or -b
+#       --help     display this help and exit
+#       --version  output version information and exit
+# 
+# The SIZE argument is an integer and optional unit (example: 10K is 10*1024).
+# Units are K,M,G,T,P,E,Z,Y (powers of 1024) or KB,MB,... (powers of 1000).
+# 
+# Using color to distinguish file types is disabled both by default and
+# with --color=never.  With --color=auto, ls emits color codes only when
+# standard output is connected to a terminal.  The LS_COLORS environment
+# variable can change the settings.  Use the dircolors command to set it.
+# 
+# Exit status:
+#  0  if OK,
+#  1  if minor problems (e.g., cannot access subdirectory),
+#  2  if serious trouble (e.g., cannot access command-line argument).
+# 
+# GNU coreutils online help: <http://www.gnu.org/software/coreutils/>
+# Full documentation at: <http://www.gnu.org/software/coreutils/ls>
+# or available locally via: info '(coreutils) ls invocation'
+
+```
+
+
+
+---
+## move around on my computer
+
+check files in othter dictories:
+
+```{bash, eval=FALSE}
+$ ls -F Desktop
+data-shell/
+```
+
+
+Second, we can actually change our location to a different directory.
+
+The command to change locations is cd followed by a directory name to change our working directory. cd stands for “change directory”.
+
+```{bash, eval=FALSE}
+$ cd Desktop
+$ cd data-shell
+$ cd data
+```
+
+---
+## move around on my computer
+
+These commands will move us from our home directory onto our Desktop, then into the data-shell directory, then into the data directory. cd doesn’t print anything, but if we run pwd after it, we can see that we are now in /Users/nelle/Desktop/data-shell/data. 
+
+```{bash, eval=FALSE}
+$ pwd
+~data-shell/data
+
+$ ls -F
+amino-acids.txt   elements/     pdb/	        salmon.txt
+animals.txt       morse.txt     planets.txt     sunspot.txt
+
+```
+
+
+There is a shortcut in the shell to move up one directory level that looks like this:
+
+```{bash, eval=FALSE}
+$ cd ..
+$ pwd
+~Desktop/data-shell
+
+```
+
+---
+
+## move around on my computer
+
+The special directory .. doesn’t usually show up when we run ls. If we want to display it, we can give ls the -a flag:
+
+```{bash, eval=FALSE}
+$ ls -F -a
+./   .bash_profile  data/       north-pacific-gyre/  pizza.cfg  thesis/
+../  creatures/     molecules/  notes.txt            solar.pdf  writing/
+```
+
+
+Note that in most command line tools, multiple flags can be combined with a single - and no spaces between the flags: ls -F -a is equivalent to ls -Fa.
+
+
+It turns out that cd without an argument will return you to your home directory, which is great if you’ve gotten lost in your own filesystem.
+
+
+---
+
+## Other Hidden Files
+In addition to the hidden directories `..` and `.`, you may also see a file called `.bash_profile`. This file usually contains shell configuration settings. You may also see other files and directories beginning with .. These are usually files and directories that are used to configure different programs on your computer. The prefix . is used to prevent these configuration files from cluttering the terminal when a standard ls command is used.
+
+---
+
+
+--- 
+
+## absolute path
+
+It is possible to specify the absolute path to a directory by including its entire path from the root directory, which is indicated by a leading slash. The leading / tells the computer to follow the path from the root of the file system, so it always refers to exactly one directory, no matter where we are when we run the command.
+
+This allows us to move to our data-shell directory from anywhere on the filesystem (including from inside data). To find the absolute path we’re looking for, we can use pwd and then extract the piece we need to move to data-shell.
+
+```
+$ pwd
+/Users/nelle/Desktop/data-shell/data
+
+$ cd /Users/nelle/Desktop/data-shell
+```
+Run pwd and ls -F to ensure that we’re in the directory we expect.
+
+---
+
+--- 
+
+## Absolute vs Relative Paths
+
+Starting from /Users/amanda/data/, which of the following commands could Amanda use to navigate to her home directory, which is /Users/amanda?
+
+```
+cd .
+cd /
+cd /home/amanda
+cd ../..
+cd ~
+cd home
+cd ~/data/..
+cd
+cd ..
+
+# Solution
+# No: . stands for the current directory.
+# No: / stands for the root directory.
+# No: Amanda’s home directory is /Users/amanda.
+# No: this goes up two levels, i.e. ends in /Users.
+# Yes: ~ stands for the user’s home directory, in this case /Users/amanda.
+# No: this would navigate into a directory home in the current directory if it exists.
+# Yes: unnecessarily complicated, but correct.
+# Yes: shortcut to go back to the user’s home directory.
+# Yes: goes up one level.
+```
+
+
+---
+
+## Key Points
+1. The file system is responsible for managing information on the disk.
+1. Information is stored in files, which are stored in directories (folders).
+1. Directories can also store other directories, which forms a directory tree.
+1. cd path changes the current working directory.
+1. ls path prints a listing of a specific file or directory; ls on its own lists the current working directory.
+1. pwd prints the user’s current working directory.
+1. / on its own is the root directory of the whole file system.
+1. A relative path specifies a location starting from the current location.
+1. An absolute path specifies a location from the root of the file system.
+1. Directory names in a path are separated with / on Unix, but \ on Windows.
+1. .. means ‘the directory above the current one’; . on its own means ‘the current directory’.
+1. Most files’ names are something.extension. The extension isn’t required, and doesn’t guarantee anything, but is normally used to indicate the type of data in the file.
+
+
+
+
+---
+class: middle
+
+# Working With Files and Directories
+
+
+
+
+---
+
+## Questions
+
+-  How can I create, copy, and delete files and directories?
+-  How can I edit files?
+
+## Objectives
+
+-  Create a directory hierarchy that matches a given diagram.
+-  Create files in that hierarchy using an editor or by copying and renaming existing files.
+-  Delete specified files and/or directories.
+
+---
+
+## Create a new directory
+
+make directory
+
+the new directory(`thesis`) is created in the current working directory
+
+```
+$ mkdir thesis
+$ ls -F
+# creatures/  data/  molecules/  north-pacific-gyre/  notes.txt  pizza.cfg  solar.pdf  thesis/  writing/
+```
+
+Since we’ve just created the thesis directory, there’s nothing in it yet:
+
+```
+$ ls -F thesis
+```
+
+---
+Change working directory and create a file:
+
+```
+$ cd thesis
+$ nano draft.txt
+```
+Let’s type in a few lines of text and press Ctrl-O to write our data to disk. You will be asked what file we want to save this to: press Return to accept the suggested default of draft.txt. Once our file is saved, we can use Ctrl-X to quit the editor and return to the shell.
+
+```{r echo=FALSE}
+knitr::include_graphics("imgs/Git_bash.png")
+```
+
+nano doesn’t leave any output on the screen after it exits, but ls now shows that we have created a file called draft.txt:
+
+```
+$ ls
+# draft.txt
+```
+---
+
+## Creating Files a Different Way
+
+try the following command in your home directory:
+
+```
+$ cd                  # go to your home directory
+$ touch my_file.txt
+$ ls -l
+
+```
+
+What did the touch command do? When you look at your home directory using the GUI file explorer, does the file show up?
+
+Use ls -l to inspect the files. How large is my_file.txt?
+
+When might you want to create a file this way?
+
+
+--- 
+
+## remove files:
+
+This command removes files (rm is short for “remove”). If we run ls again, its output is empty once more, which tells us that our file is gone:
+
+```
+$ cd thesis
+$ rm draft.txt
+$ ls
+```
+
+--- 
+
+## Deleting Is Forever
+
+Let’s re-create that file and then move up one directory to /Users/nelle/Desktop/data-shell using cd ..:
+
+```
+$ pwd
+/Users/nelle/Desktop/data-shell/thesis
+$ nano draft.txt
+$ ls
+draft.txt
+$ cd ..
+```
+
+If we try to remove the entire thesis directory using rm thesis, we get an error message:
+
+```
+$ rm thesis
+rm: cannot remove `thesis': Is a directory
+```
+
+This happens because rm by default only works on files, not directories.
+
+To really get rid of thesis we must also delete the file draft.txt. We can do this with the recursive option for rm:
+
+```
+$ rm -r thesis
+```
+---
+
+## Using rm Safely
+
+The -i option will prompt before every removal.
+
+```
+$ rm -i thesis/quotations.txt
+```
+
+If we’re concerned about what we might be deleting we can add the “interactive” flag -i to rm which will ask us for confirmation before each step
+```
+$ rm -r -i thesis
+rm: descend into directory ‘thesis’? y
+rm: remove regular file ‘thesis/draft.txt’? y
+rm: remove directory ‘thesis’? y
+
+```
+
+---
+## move files
+
+```
+$ pwd
+/Users/nelle/Desktop/data-shell
+$ mkdir thesis
+$ nano thesis/draft.txt
+$ ls thesis
+draft.txt
+```
+
+change the file’s name using mv(“move”):
+
+```
+$ mv thesis/draft.txt thesis/quotes.txt
+$ ls thesis
+quotes.txt
+```
+
+mv also works on directories:
+
+```
+$ mv thesis/quotes.txt .
+```
+
+---
+## Moving to the Current Folder
+
+After running the following commands, Jamie realizes that she put the files sucrose.dat and maltose.dat into the wrong folder:
+```
+$ ls -F
+ analyzed/ raw/
+$ ls -F analyzed
+fructose.dat glucose.dat maltose.dat sucrose.dat
+$ cd raw/
+```
+
+move these files to the current folder:
+```
+$ mv ../analyzed/sucrose.dat ../analyzed/maltose.dat .
+```
+
+---
+## cp
+
+cp copies a file instead of moving it.
+
+```
+$ cp quotes.txt thesis/quotations.txt
+```
+
+---
+## Renaming Files
+
+```
+mv statstics.txt statistics.txt
+```
+## move all files(*.dat) to analyzed folder
+
+mv *.dat analyzed
+
+---
+## Key Points
+
+1. cp old new  : copies a file.
+1. mkdir path : creates a new directory.
+1. mv old new : moves (renames) a file or directory.
+1. rm path : removes (deletes) a file.
+
+
+
+---
+
+## Good names for files and directories
+
+1. Don’t use whitespaces.
+
+  -  use - or _ instead of whitespace.
+
+1. Don’t begin the name with - (dash).
+
+  -  Commands treat names starting with - as options.
+
+1. Stick with letters, numbers, . (period or ‘full stop’), - (dash) and _ (underscore).
+
+
+If you need to refer to names of files or directories that have whitespace or another non-alphanumeric character, you should surround the name in quotes ("").
+
+
+---
+class: middle
+
+# Working With Files and Directories
+
+
+---
+
+## Overview
+
+### Questions
+
+-  How can I combine existing commands to do new things?
+
+### Objectives
+
+-  Redirect a command’s output to a file.
+
+-  Process a file instead of keyboard input using redirection.
+
+-  Construct command pipelines with two or more stages.
+
+-  Explain what usually happens if a program or pipeline isn’t given any input to process.
+
+-  Explain Unix’s ‘small pieces, loosely joined’ philosophy.
+
+---
+## wc : word count
+
+wc is the “word count” command: it counts the number of lines, words, and characters in files. 
+
+```
+$ cd molecules
+$ wc *.pdb
+  20  156 1158 cubane.pdb
+  12   84  622 ethane.pdb
+   9   57  422 methane.pdb
+  30  246 1828 octane.pdb
+  21  165 1226 pentane.pdb
+  15  111  825 propane.pdb
+ 107  819 6081 total
+```
+
+### Wildcards
+
+* is a wildcard. It matches zero or more characters.
+
+? is also a wildcard, but it only matches a single character. 
+
+the wildcard expression *[AB].txt matches all files ending in A.txt or B.txt. Imagine you forgot about this.
+
+--- 
+## wc
+
+If we run wc -l instead of just wc, the output shows only the number of lines per file:
+
+
+```
+$ wc -l *.pdb
+  20  cubane.pdb
+  12  ethane.pdb
+   9  methane.pdb
+  30  octane.pdb
+  21  pentane.pdb
+  15  propane.pdb
+ 107  total
+```
+
+We can also use -w to get only the number of words, or -c to get only the number of characters.
+
+---
+
+## redirect: >
+
+```
+$ wc -l *.pdb > lengths.txt
+```
+
+The greater than symbol, >, tells the shell to redirect the command’s output to a file instead of printing it to the screen. 
+
+
+## cat
+
+cat stands for “concatenate”: it prints the contents of files one after another. 
+
+```
+$ cat lengths.txt
+  20  cubane.pdb
+  12  ethane.pdb
+   9  methane.pdb
+  30  octane.pdb
+  21  pentane.pdb
+  15  propane.pdb
+ 107  total
+```
+
+--- 
+## Output Page by Page
+
+```
+$ less lengths.txt.
+```
+This displays a screenful of the file, and then stops. You can go forward one screenful by pressing the spacebar, or back one by pressing b. Press q to quit.
+
+
+---
+## sort -n :
+
+We will also use the -n flag to specify that the sort is numerical instead of alphabetical. This does not change the file; instead, it sends the sorted result to the screen:
+
+```
+$ sort -n lengths.txt
+  9  methane.pdb
+ 12  ethane.pdb
+ 15  propane.pdb
+ 20  cubane.pdb
+ 21  pentane.pdb
+ 30  octane.pdb
+107  total
+```
+ This does not change the file; instead, it sends the sorted result to the screen.
+ 
+```
+$ sort -n lengths.txt > sorted-lengths.txt
+$ head -n 1 sorted-lengths.txt
+
+  9  methane.pdb
+```
+---
+## >>
+
+the >> operator also writes “hello” to a file (in this casetestfile02.txt), but appends the string to the file if it already exists (i.e. when we run it for the second time).
+
+```
+$ echo hello >> testfile02.txt
+```
+
+```
+$ head -n 3 animals.txt > animalsUpd.txt
+$ tail -n 2 animals.txt >> animalsUpd.txt
+```
+
+---
+## pipe
+
+The vertical bar, |, between the two commands is called a pipe. It tells the shell that we want to use the output of the command on the left as the input to the command on the right. 
+
+```
+$ sort -n lengths.txt | head -n 1
+  9  methane.pdb
+```
+```
+$ wc -l *.pdb | sort -n
+   9 methane.pdb
+  12 ethane.pdb
+  15 propane.pdb
+  20 cubane.pdb
+  21 pentane.pdb
+  30 octane.pdb
+ 107 total
+```
+
+```
+$ wc -l *.pdb | sort -n | head -n 1
+   9  methane.pdb
+```
+
+--- 
+## uniq
+
+The command uniq removes adjacent duplicated lines from its input. 
+
+```
+coho
+coho
+steelhead
+coho
+steelhead
+steelhead
+```
+
+```
+$ sort salmon.txt | uniq
+coho
+steelhead
+coho
+steelhead
+```
+
+```
+$ cat animals.txt | head -n 5 | tail -n 3 | sort -r > final.txt
+```
+
+---
+## cut
+
+```
+$ cut -d , -f 2 animals.txt
+```
+
+uses the -d flag to separate each line by comma, and the -f flag to print the second field in each line, to give the following output:
+
+```
+$ cut -d , -f 2 animals.txt | sort | uniq
+```
+
+--- 
+## Key Points
+
+1. cat displays the contents of its inputs.
+
+1. head displays the first few lines of its input.
+
+1. tail displays the last few lines of its input.
+
+1. sort sorts its inputs.
+
+1. wc counts lines, words, and characters in its inputs.
+
+1. * matches zero or more characters in a filename, so *.txt matches all files ending in .txt.
+
+1. ? matches any single character in a filename, so ?.txt matches a.txt but not any.txt.
+
+1. command > file redirects a command’s output to a file.
+
+1. first | second is a pipeline: the output of the first command is used as the input to the second.
+
+1. The best way to use the shell is to use pipes to combine simple single-purpose programs (filters).
+
+
+---
+class: middle
+
+# Loops
+
+
+---
+
+## Overviews
+
+Questions
+
+-  How can I perform the same actions on many different files?
+
+Objectives
+
+-  Write a loop that applies one or more commands separately to each file in a set of files.
+
+-  Trace the values taken on by a loop variable during execution of the loop.
+
+-  Explain the difference between a variable’s name and its value.
+
+-  Explain why spaces and some punctuation characters shouldn’t be used in file names.
+
+-  Demonstrate how to see what commands have recently been executed.
+
+-  Re-run recently executed commands without retyping them.
+
+
+--- 
+## Loop format
+
+```
+$ for filename in basilisk.dat unicorn.dat
+> do
+>    head -n 3 $filename	# Indentation within the loop aids legibility
+> done
+```
+
+Note that it is common practice to indent the line(s) of code within a for loop. The only purpose is to make the code easier to read – it is not required for the loop to run.
+
+
+### Follow the Prompt
+
+The shell prompt changes from $ to > and back again as we were typing in our loop. The second prompt, >, is different to remind us that we haven’t finished typing a complete command yet. A semicolon, ;, can be used to separate two commands written on a single line.
+
+--- 
+## slightly more complicated loop:
+
+```
+for filename in *.dat
+do
+    echo $filename
+    head -n 100 $filename | tail -n 20
+done
+```
+
+--- 
+## Nelle’s Pipeline: Processing Files
+
+```
+$ cd north-pacific-gyre/2012-07-03
+$ for datafile in NENE*[AB].txt
+> do
+>     echo $datafile
+> done
+NENE01729A.txt
+NENE01729B.txt
+NENE01736A.txt
+...
+NENE02043A.txt
+NENE02043B.txt
+```
+
+```
+$ for datafile in NENE*[AB].txt
+> do
+>     echo $datafile stats-$datafile
+> done
+NENE01729A.txt stats-NENE01729A.txt
+NENE01729B.txt stats-NENE01729B.txt
+NENE01736A.txt stats-NENE01736A.txt
+...
+NENE02043A.txt stats-NENE02043A.txt
+NENE02043B.txt stats-NENE02043B.txt
+```
+
+```
+$ for datafile in NENE*[AB].txt; do echo $datafile; bash goostats $datafile stats-$datafile; done
+```
+
+--- 
+## History
+```
+$ history | tail -n 5
+  456  ls -l NENE0*.txt
+  457  rm stats-NENE01729B.txt.txt
+  458  bash goostats NENE01729B.txt stats-NENE01729B.txt
+  459  ls -l NENE0*.txt
+  460  history
+```
+
+## Saving to a File in a Loop - Part Two
+
+```
+for datafile in *.pdb
+do
+    cat $datafile >> all.pdb
+done
+```
+
+## Nested Loops
+
+```
+for species in cubane ethane methane
+do
+    for temperature in 25 30 37 40
+    do
+        mkdir $species-$temperature
+    done
+done
+```
+
+---
+## Key Points
+
+1. A for loop repeats commands once for every thing in a list.
+
+1. Every for loop needs a variable to refer to the thing it is currently operating on.
+
+1. Use $name to expand a variable (i.e., get its value). ${name} can also be used.
+
+1. Do not use spaces, quotes, or wildcard characters such as ‘*’ or ‘?’ in filenames, as it complicates variable expansion.
+
+1. Give files consistent names that are easy to match with wildcard patterns to make it easy to select them for looping.
+
+1. Use the up-arrow key to scroll up through previous commands to edit and repeat them.
+
+1. Use Ctrl-R to search through the previously entered commands.
+
+1. Use history to display recent commands, and !number to repeat a command by number.
+
+
+
+---
+class: middle
+
+# Shell Scripts
+
+
+---
+## Overview:
+
+Questions
+
+-  How can I save and re-use commands?
+
+Objectives
+
+-  Write a shell script that runs a command or series of commands for a fixed set of files.
+
+-  Run a shell script from the command line.
+
+-  Write a shell script that operates on a set of files defined by the user on the command line.
+
+-  Create pipelines that include shell scripts you, and others, have written.
+
+---
+
+## settings
+
+Let’s start by going back to molecules/ and creating a new file, middle.sh which will become our shell script:
+
+```
+$ cd molecules
+$ nano middle.sh
+```
+
+```
+# middle.sh
+head -n 15 octane.pdb | tail -n 5
+```
+
+```
+$ bash middle.sh
+ATOM      9  H           1      -4.502   0.681   0.785  1.00  0.00
+ATOM     10  H           1      -5.254  -0.243  -0.537  1.00  0.00
+ATOM     11  H           1      -4.357   1.252  -0.895  1.00  0.00
+ATOM     12  H           1      -3.009  -0.741  -1.467  1.00  0.00
+ATOM     13  H           1      -3.172  -1.337   0.206  1.00  0.00
+```
+
+--- 
+## arbitray file?
+
+```
+$ nano middle.sh
+
+# middle.sh
+head -n 15 "$1" | tail -n 5
+```
+
+Inside a shell script, $1 means “the first filename (or other 
+argument) on the command line”.
+
+```
+$ bash middle.sh octane.pdb
+ATOM      9  H           1      -4.502   0.681   0.785  1.00  0.00
+ATOM     10  H           1      -5.254  -0.243  -0.537  1.00  0.00
+ATOM     11  H           1      -4.357   1.252  -0.895  1.00  0.00
+ATOM     12  H           1      -3.009  -0.741  -1.467  1.00  0.00
+ATOM     13  H           1      -3.172  -1.337   0.206  1.00  0.00
+```
+
+### Double-Quotes Around Arguments
+For the same reason that we put the loop variable inside double-quotes, in case the filename happens to contain any spaces, we surround $1 with double-quotes.
+
+--- 
+## more arguments
+
+```
+$ nano middle.sh
+head -n "$2" "$1" | tail -n "$3"
+```
+
+```
+$ bash middle.sh pentane.pdb 15 5
+ATOM      9  H           1       1.324   0.350  -1.332  1.00  0.00
+ATOM     10  H           1       1.271   1.378   0.122  1.00  0.00
+ATOM     11  H           1      -0.074  -0.384   1.288  1.00  0.00
+ATOM     12  H           1      -0.048  -1.362  -0.205  1.00  0.00
+ATOM     13  H           1      -1.183   0.500  -1.412  1.00  0.00
+```
+
+### comments in the script
+```
+$ nano middle.sh
+# Select lines from the middle of a file.
+# Usage: bash middle.sh filename end_line num_lines
+head -n "$2" "$1" | tail -n "$3"
+```
+
+--- 
+## What if we want to process many files in a single pipeline?
+
+We can’t use \$1, \$2, and so on because we don’t know how many files there are. Instead, we use the special variable \$@, which means, “All of the command-line arguments to the shell script.” We also should put \$@ inside double-quotes to handle the case of arguments containing spaces ("\$@" is equivalent to "\$1" "\$2" …) Here’s an example:
+
+```
+$ nano sorted.sh
+
+# Sort filenames by their length.
+# Usage: bash sorted.sh one_or_more_filenames
+wc -l "$@" | sort -n
+
+$ bash sorted.sh *.pdb ../creatures/*.dat
+
+9 methane.pdb
+12 ethane.pdb
+15 propane.pdb
+20 cubane.pdb
+21 pentane.pdb
+30 octane.pdb
+163 ../creatures/basilisk.dat
+163 ../creatures/unicorn.dat
+
+```
+
+--- 
+## List Unique Species
+
+Leah has several hundred data files, each of which is formatted like this:
+
+2013-11-05,deer,5
+2013-11-05,rabbit,22
+2013-11-05,raccoon,7
+2013-11-06,rabbit,19
+2013-11-06,deer,2
+2013-11-06,fox,1
+2013-11-07,rabbit,18
+2013-11-07,bear,1
+
+
+---
+Write a shell script called species.sh that takes any number of filenames as command-line arguments, and uses cut, sort, and uniq to print a list of the unique species appearing in each of those files separately.
+
+```
+# Script to find unique species in csv files where species is the second data field
+# This script accepts any number of file names as command line arguments
+
+# Loop over all files
+for file in $@ 
+do
+	echo "Unique species in $file:"
+	# Extract species names
+	cut -d , -f 2 $file | sort | uniq
+done
+```
+---
+## history
+
+Suppose we have just run a series of commands that did something useful — for example, that created a graph we’d like to use in a paper. We’d like to be able to re-create the graph later if we need to, so we want to save the commands in a file. Instead of typing them in again (and potentially getting them wrong) we can do this:
+
+$ history | tail -n 5 > redo-figure-3.sh
+
+The file redo-figure-3.sh now contains:
+
+```
+297 bash goostats NENE01729B.txt stats-NENE01729B.txt
+298 bash goodiff stats-NENE01729B.txt /data/validated/01729.txt > 01729-differences.txt
+299 cut -d ',' -f 2-3 01729-differences.txt > 01729-time-series.txt
+300 ygraph --format scatter --color bw --borders none 01729-time-series.txt figure-3.png
+301 history | tail -n 5 > redo-figure-3.sh
+```
+
+---
+
+## Nelle’s Pipeline: Creating a Script
+Nelle’s supervisor insisted that all her analytics must be reproducible. The easiest way to capture all the steps is in a script. She runs the editor and writes the following:
+
+```
+# Calculate stats for data files.
+for datafile in "$@"
+do
+    echo $datafile
+    bash goostats $datafile stats-$datafile
+done
+```
+
+She saves this in a file called do-stats.sh so that she can now re-do the first stage of her analysis by typing:
+
+```
+$ bash do-stats.sh NENE*[AB].txt
+```
+
+She can also do this:
+
+```
+$ bash do-stats.sh NENE*[AB].txt | wc -l
+```
+
+so that the output is just the number of files processed rather than the names of the files that were processed.
+
+One thing to note about Nelle’s script is that it lets the person running it decide what files to process. She could have written it as:
+
+```
+# Calculate stats for Site A and Site B data files.
+for datafile in NENE*[AB].txt
+do
+    echo $datafile
+    bash goostats $datafile stats-$datafile
+done
+```
+
+The advantage is that this always selects the right files: she doesn’t have to remember to exclude the ‘Z’ files. The disadvantage is that it always selects just those files — she can’t run it on all files (including the ‘Z’ files), or on the ‘G’ or ‘H’ files her colleagues in Antarctica are producing, without editing the script. If she wanted to be more adventurous, she could modify her script to check for command-line arguments, and use NENE*[AB].txt if none were provided. Of course, this introduces another tradeoff between flexibility and complexity.
+
+---
+## Variables in Shell Scripts
+
+In the molecules directory, imagine you have a shell script called script.sh containing the following commands:
+
+```
+head -n $2 $1
+tail -n $3 $1
+```
+
+While you are in the molecules directory, you type the following command:
+
+```
+bash script.sh '*.pdb' 1 1
+```
+
+The first and the last line of each file ending in .pdb in the molecules directory.
+
+---
+## Find the Longest File With a Given Extension
+
+```
+$ bash longest.sh /tmp/data pdb
+```
+
+would print the name of the .pdb file in /tmp/data that has the most lines.
+
+Solution
+
+```
+# Shell script which takes two arguments: 
+#    1. a directory name
+#    2. a file extension
+# and prints the name of the file in that directory
+# with the most lines which matches the file extension.
+
+wc -l $1/*.$2 | sort -n | tail -n 2 | head -n 1
+```
+
+---
+## Script Reading Comprehension
+
+For this question, consider the data-shell/molecules directory once again. This contains a number of .pdb files in addition to any other files you may have created. Explain what a script called example.sh would do when run as bash example.sh *.pdb if it contained the following lines:
+
+```
+# Script 1
+echo *.*
+```
+```
+# Script 2
+for filename in $1 $2 $3
+do
+    cat $filename
+done
+```
+```
+# Script 3
+echo $@.pdb
+```
+
+Solutions
+
+Script 1 would print out a list of all files containing a dot in their name.
+
+Script 2 would print the contents of the first 3 files matching the file extension. The shell expands the wildcard before passing the arguments to the example.sh script.
+
+Script 3 would print all the arguments to the script (i.e. all the .pdb files), followed by .pdb.
+
+```
+cubane.pdb ethane.pdb methane.pdb octane.pdb pentane.pdb propane.pdb.pdb
+```
+
+
+---
+## Key Points
+
+-  Save commands in files (usually called shell scripts) for re-use.
+
+-  bash filename runs the commands saved in a file.
+
+-  $@ refers to all of a shell script’s command-line arguments.
+
+-  $1, $2, etc., refer to the first command-line argument, the second command-line argument, etc.
+
+-  Place variables in quotes if the values might have spaces in them.
+
+-  Letting users decide what files to process is more flexible and more consistent with built-in Unix commands.
+
+
+---
+class: middle, center
+
+# Finding Things
+
+
+
+--- 
+## Overview
+
+Questions
+
+-  How can I find files?
+
+-  How can I find things in files?
+
+Objectives
+
+-  Use grep to select lines from text files that match simple patterns.
+
+-  Use find to find files whose names match simple patterns.
+
+-  Use the output of one command as the command-line argument(s) to another command.
+
+-  Explain what is meant by ‘text’ and ‘binary’ files, and why many common tools don’t handle the latter well.
+
+
+
+---
+
+## grep
+
+“grep” is a contraction of “global/regular expression/print”
+
+grep finds and prints lines in files that match a pattern. 
+
+For our examples, we will use a file that contains three haikus taken from a 1998 competition in Salon magazine:
+
+```
+$ cd
+$ cd Desktop/data-shell/writing
+$ cat haiku.txt
+
+The Tao that is seen
+Is not the true Tao, until
+You bring fresh toner.
+
+With searching comes loss
+and the presence of absence:
+"My Thesis" not found.
+
+Yesterday it worked
+Today it is not working
+Software is like that.
+```
+
+--- 
+## Let’s find lines that contain the word “not”:
+
+Here, not is the pattern we’re searching for. The output is the three lines in the file that contain the letters “not”.
+
+```
+$ grep not haiku.txt
+
+Is not the true Tao, until
+"My Thesis" not found
+Today it is not working
+```
+
+Let’s try a different pattern: “The”.
+
+```
+$ grep The haiku.txt
+The Tao that is seen
+"My Thesis" not found.
+```
+
+This time, two lines that include the letters “The” are outputted. However, one instance of those letters is contained within a larger word, “Thesis”.
+
+--- 
+
+## -w flag : limit matches to word boundaries.
+
+```
+$ grep -w The haiku.txt
+The Tao that is seen
+```
+
+Note that a “word boundary” includes the start and end of a line, so not just letters surrounded by spaces. 
+
+Sometimes we don’t want to search for a single word, but a phrase. This is also easy to do with grep by putting the phrase in quotes.
+
+```
+$ grep -w "is not" haiku.txt
+Today it is not working
+```
+
+---
+## -n flag : numbers the lines that match:
+
+```
+$ grep -n "it" haiku.txt
+5:With searching comes loss
+9:Yesterday it worked
+10:Today it is not working
+```
+Here, we can see that lines 5, 9, and 10 contain the letters “it”.
+
+---
+## ??
+
+We can combine options (i.e. flags) as we do with other Unix commands. For example, let’s find the lines that contain the word “the”. We can combine the option -w to find the lines that contain the word “the” and -n to number the lines that match:
+
+```
+$ grep -n -w "the" haiku.txt
+2:Is not the true Tao, until
+6:and the presence of absence:
+```
+---
+## -i flag : make our search case-insensitive:
+
+```
+$ grep -n -w -i "the" haiku.txt
+1:The Tao that is seen
+2:Is not the true Tao, until
+6:and the presence of absence:
+```
+
+---
+## -v flag : invert our search, i.e., we want to output the lines that do not contain the word “the”.
+
+```
+$ grep -n -w -v "the" haiku.txt
+1:The Tao that is seen
+3:You bring fresh toner.
+4:
+5:With searching comes loss
+7:"My Thesis" not found.
+8:
+9:Yesterday it worked
+10:Today it is not working
+11:Software is like that.
+```
+
+---
+## grep options:
+
+```
+$ grep --help
+
+Usage: grep [OPTION]... PATTERN [FILE]...
+Search for PATTERN in each FILE or standard input.
+PATTERN is, by default, a basic regular expression (BRE).
+Example: grep -i 'hello world' menu.h main.c
+
+Regexp selection and interpretation:
+  -E, --extended-regexp     PATTERN is an extended regular expression (ERE)
+  -F, --fixed-strings       PATTERN is a set of newline-separated fixed strings
+  -G, --basic-regexp        PATTERN is a basic regular expression (BRE)
+  -P, --perl-regexp         PATTERN is a Perl regular expression
+  -e, --regexp=PATTERN      use PATTERN for matching
+  -f, --file=FILE           obtain PATTERN from FILE
+  -i, --ignore-case         ignore case distinctions
+  -w, --word-regexp         force PATTERN to match only whole words
+  -x, --line-regexp         force PATTERN to match only whole lines
+  -z, --null-data           a data line ends in 0 byte, not newline
+
+Miscellaneous:
+...        ...        ...
+```
+
+---
+## -E flag
+```
+$ grep -E '^.o' haiku.txt
+You bring fresh toner.
+Today it is not working
+Software is like that.
+```
+
+We use the -E flag and put the pattern in quotes to prevent the shell from trying to interpret it. (If the pattern contained a *, for example, the shell would try to expand it before running grep.) The ^ in the pattern anchors the match to the start of the line. The . matches a single character (just like ? in the shell), while the o matches an actual ‘o’.
+
+---
+## Tracking a Species
+
+Leah has several hundred data files saved in one directory, each of which is formatted like this:
+
+```
+2013-11-05,deer,5
+2013-11-05,rabbit,22
+2013-11-05,raccoon,7
+2013-11-06,rabbit,19
+2013-11-06,deer,2
+```
+
+She wants to write a shell script that takes a species as the first command-line argument and a directory as the second argument. The script should return one file called species.txt containing a list of dates and the number of that species seen on each date. For example using the data shown above, rabbit.txt would contain:
+
+```
+2013-11-05,22
+2013-11-06,19
+```
+
+Put these commands and pipes in the right order to achieve this:
+
+```
+cut -d : -f 2  
+>  
+|  
+grep -w $1 -r $2  
+|  
+$1.txt  
+cut -d , -f 1,3  
+```
+
+Hint: use man grep to look for how to grep text recursively in a directory and man cut to select more than one field in a line.
+
+An example of such a file is provided in data-shell/data/animal-counts/animals.txt
+
+Solution
+
+```
+grep -w $1 -r $2 | cut -d : -f 2 | cut -d , -f 1,3  > $1.txt
+```
+
+You would call the script above like this:
+
+```
+$ bash count-species.sh bear .
+```
+
+--- 
+## find
+
+While grep finds lines in files, the find command finds files themselves. Again, it has a lot of options; to show how the simplest ones work, we’ll use the directory tree shown below.
+
+```
+$ find .
+.
+./data
+./data/one.txt
+./data/LittleWomen.txt
+./data/two.txt
+./tools
+./tools/format
+./tools/old
+./tools/old/oldtool
+./tools/stats
+./haiku.txt
+./thesis
+./thesis/empty-draft.md
+```
+---
+## find : -type d 
+
+The first option in our list is -type d that means “things that are directories”. 
+
+```
+$ find . -type d
+./
+./data
+./thesis
+./tools
+./tools/old
+```
+
+## find : -type f
+
+we get a listing of all the files instead:
+
+```
+$ find . -type f
+./haiku.txt
+./tools/stats
+./tools/old/oldtool
+./tools/format
+./thesis/empty-draft.md
+./data/one.txt
+./data/LittleWomen.txt
+./data/two.txt
+```
+
+Now let’s try matching by name:
+
+```
+$ find . -name *.txt
+./haiku.txt
+```
+
+$ find . -name haiku.txt
+
+find did what we asked; we just asked for the wrong thing.
+
+put \*.txt in single quotes to prevent the shell from expanding the \* wildcard. This way, find actually gets the pattern *.txt, not the expanded filename haiku.txt:
+
+```
+$ find . -name '*.txt'
+./data/one.txt
+./data/LittleWomen.txt
+./data/two.txt
+./haiku.txt
+```
+
+---
+## Listing vs. Finding
+
+ls and find can be made to do similar things given the right options, but under normal circumstances, ls lists everything it can, while find searches for things with certain properties and shows them.
+
+### ??
+
+The simplest way is to put the find command inside $():
+
+```
+$ wc -l $(find . -name '*.txt')
+11 ./haiku.txt
+300 ./data/two.txt
+21022 ./data/LittleWomen.txt
+70 ./data/one.txt
+21403 total
+```
+
+```
+$ grep "FE" $(find .. -name '*.pdb')
+../data/pdb/heme.pdb:ATOM     25 FE           1      -0.924   0.535  -0.518
+```
+
+---
+## Matching and Subtracting
+
+The -v flag to grep inverts pattern matching, so that only lines which do not match the pattern are printed. 
+
+```
+find data -name '*s.txt' | grep -v net
+```
+
+## find Pipeline Reading Comprehension
+Write a short explanatory comment for the following shell script:
+
+```
+wc -l $(find . -name '*.dat') | sort -n
+```
+
+Solution
+
+Find all files with a .dat extension in the current directory
+Count the number of lines each of these files contains
+Sort the output from step 2. numerically
+
+---
+## Key Points
+
+-  find finds files with specific properties that match patterns.
+
+-  grep selects lines in files that match patterns.
+
+-  --help is a flag supported by many bash commands, and programs that can be run from within Bash, to display more information on how to use these commands or programs.
+
+-  man command displays the manual page for a given command.
+
+-  $(command) inserts a command’s output in place.
+
+

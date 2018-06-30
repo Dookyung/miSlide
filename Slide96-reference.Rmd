@@ -1,0 +1,45 @@
+---
+title: "reference"
+author: "Dookyung Kim"
+date: "2018-06-30"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+exclude: true
+
+```{r, message=FALSE, warning=FALSE, include=FALSE}
+options(
+  htmltools.dir.version = FALSE, # for blogdown
+  width=80
+)
+
+# library(emo)
+htmltools::tagList(rmarkdown::html_dependency_font_awesome())
+```
+
+---
+class: middle
+count: false
+
+# reference
+
+---
+
+## class
+
+- [stat545](stat545.com)
+
+
+
+---
+
+## book
+
+- [happygit](happygitwithr.com)
