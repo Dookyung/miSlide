@@ -27,7 +27,7 @@ a, a > code {
 }
 
 .normal {
-  font-size: 95%;
+  font-size: 90%;
 }
 
 .small {
@@ -92,6 +92,7 @@ li{
     background-color: #AFB1B4;
     padding: 10px;
 }
+
 .large { font-size: 130% }
 .small { font-size: 70% }
 

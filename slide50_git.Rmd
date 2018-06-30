@@ -209,46 +209,51 @@ To start working on a project, Pull any new changes to update your local copy.
 Now you can make changes on your own computer. When you are finished, to Push these changes to the remote repository (e.g., GitHub).
 
 ---
-### 2.4.2. CREATE A NEW BRANCH
+class: large
 
-Branching is the way to work on different versions of a repository at one time. 
-We use branches to experiment and make edits before committing them to master.
+## Branch
 
-By default your repository has one branch named master which is considered to be the definitive branch.
+Branching하는 순간의 master 버전의 copy 또는 snapshot을 만들어 프로그램을 변경하고 이후에 이를 Master 버전에 merging하여 수정사항을 반영하기 위해 사용
 
-When you create a branch off the master branch, you’re making a copy, or snapshot, of master as it was at that point in time. 
+### How to create a new branch:
 
-Go to your repository and click the drop down at the top of the file list that says branch: master. Type a branch name into the new branch text box. Select the blue Create branch box or hit “Enter” on your keyboard.
+-  [Github에서] 
 
-Now you have two branches, master and NewPlot. 
+    1. Github repository에서 왼쪽 중간의 `branch: master`라는 풀다운 메뉴를 클릭하고 branch name을 입력
 
+    1. 파란색 `Create branch` 박스를 클릭하고 키보드의 “Enter” 버튼 클릭
 
-Next we’ll add our changes to the new branch.
+-  [RStudio에서] 
 
-Go back to your project in RStudio. In the Git tab, if you hover the mouse pointer over the master drop menu you will see a tooltip that says Switch branch. However, if you click on master and open the drop menu you will notice that the only branch present is master.
+    1. Git탭에서 `Pull` 버튼 클릭
 
-This is because we need to Pull the changes that we made to our online repo into our local copy of the project on our computer. In the Git tab click on Pull. You will receive a message that tells you about all the changes that you have made in your repo, in this case adding a README.md file and creating a new branch.
-
-If you click on master again you will now see the new branch that you created. Click on it to switch from master to NewPlot so we can continue working on the new branch.
-
---- 
-## 2.4.3. MAKE AND PUSH CHANGES TO A BRANCH
-
-Now we can add a new plot to our script. Type the following code and then click Run.
-
-```
-boxplot(cars$speed)
-```
-
-Save your edited R script, click on the Staged box like you did before and click on Commit. In the Review changes page, write a commit message and click on Commit. Before you close the window, click on Push.
+    1. Git탭의 `master` 버튼을 클릭하면 나타나는 풀다운 메뉴에서 새로 생성했던 branch name을 선택하여 작업대상공간을 master에서 new branch로 변경
+    
 
 ---
-## 2.4.4. PULL REQUEST AND MERGE CHANGES
+class: large
 
-Now go back to your repo on GitHub. You will notice that at the top of all you files there is a new section that says: Your recently pushed branches:. The changes you made to your script have been pushed to your online copy of the project and are now in the branch NewPlot. In order to merge them into your master branch we need to create a pull request.
+### Branch : How to change programs
 
+-  [RStudio에서] 
 
-In the Open a pull request page click on Create pull request.
+    1. 프로그램을 수정한 후 저장
+    
+    1. Git탭에서 변경된 파일들의 `Staged` 체크박스 선택한 후 `Commit` 버튼 클릭
+    
+    1. `Review changes` 창이 나타나면 commit message를 입력하고 `Commit` 버튼 클릭
+    
+    1. 마지막으로 `Push` 버튼을 클릭하면 변경된 내용이 github에 반영
+
+-  [Github에서] 
+
+    1. You will notice that at the top of all you files there is a new section that says: Your recently pushed branches:. 
+    
+    1. The changes you made to your script have been pushed to your online copy of the project and are now in the branch NewPlot. 
+    
+    1. In order to merge them into your master branch we need to create a pull request.
+
+    1. In the Open a pull request page click on Create pull request.
 
 
 GitHub has now compared the two versions of your project that are in the two branches, master and NewPlot and it is telling us that there are no conflicts between the two versions.
