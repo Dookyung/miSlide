@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Git</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Dookyung Kim" />
+    <meta name="date" content="2018-06-30" />
+    <link href="libs/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Git
+### Dookyung Kim
+### 2018-06-30
+
+---
+
+exclude: true
+
+
+
+---
+class: middle
+
+# VERSION CONTROL WITH RSTUDIO AND GITHUB
+
+
+
+---
+## table of content
+
+Getting set up with Git and RStudio
+
+1 Configure Git
+
+Version control with RStudio and Git
+
+1. Setting up a version controlled project in RStudio
+2. Making changes
+3. Setting up a remote repository on GitHub
+4. Subsequent workflow
+    -  Pull and push changes
+    -  Create a new branch
+    -  Make and push changes to a branch
+    -  Pull request and merge changes
+    
+Summary
+
+---
+## GETTING SET UP WITH GIT AND RSTUDIO
+
+시작전에 먼저 GitHub account를 만들고 Git을 설치
+
+커맨드창 열기(terminal, cmd, Ctrl+Alt+T)
+
+check version of you git
+
+```
+git version
+```
+
+
+### CONFIGURE GIT
+
+After installing git, you need to tell it who you are. 
+Open a terminal window or command prompt (see above) and type the following:
+
+```
+git config --global user.email "you@youremail.com"
+
+git config --global user.name "Your Name"
+```
+
+On succesful completion, you should see no output from these commands. You can also configure git to use your preferred editor for commit messages:
+
+```
+# Mac or Linux:
+git config --global core.editor nano
+
+# Windows:
+git config --global core.editor notepad
+```
+
+---
+## VERSION CONTROL WITH RSTUDIO AND GIT
+
+### SETTING UP A VERSION CONTROLLED PROJECT IN RSTUDIO
+
+Create a new project in RStudio as follows:
+
+-  File -&gt; New Project -&gt; New Directory. Then click on Empty Project
+-  In the Create New Project screen, give your project a name, navigate to the directory you want to save your project in and make sure that Create a git repository is checked. Then click on Create Project.
+
+
+Two files are created in the otherwise empty project:
+
+-  .gitignore – Specifies files that should be ignored by the version control system.
+-  NewProject.Rproj – Configuration information for the RStudio project.
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
