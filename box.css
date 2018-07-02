@@ -1,0 +1,76 @@
+/* intro colour */
+
+.slide-intro {
+  background-color: #ADEBAD;
+}
+
+.intro a {
+  color: rgb(42, 124, 223);
+  border-bottom: 1px solid rgba(42, 124, 223, 0.5);
+}
+
+.intro a:hover {
+  color: #000000 !important;
+}
+
+.box.intro {
+  background-color: #ADEBAD;
+  color: #000000;
+  border: 2px solid #1F7A1F;
+}
+
+.box.intro > h3:first-child {
+  background-color: #1F7A1F;
+  color: #FFFFFF;
+}
+
+blockquote.intro::before {
+  color : #1F7A1F;
+}
+
+blockquote.intro {
+  background-color: #ADEBAD;
+  color: #000000;
+  border-color: #1F7A1F;
+}
+
+.box.intro > h3:first-child > code {
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+.box.intro > h3:first-child > a {
+  color: rgb(200, 240, 250);
+  border-bottom: 1px solid rgba(200, 240, 250, 0.5);
+}
+
+.box.intro > h3:first-child > a:hover {
+  color: #FFFFFF !important;
+}
+
+slide.slide-intro > hgroup > h2 {
+  color: rgba(0, 0, 0, 0.8);
+}
+
+slide.slide-intro > hgroup > h3 {
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.intro code {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.intro .table-striped > tbody > tr:nth-of-type(odd) {
+  background-color: #f9f9f9;
+}
+
+.intro .table-striped > tbody > tr:nth-of-type(odd) {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.intro table th {
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.intro .table, .intro .table th, .intro .table td, .table thead tr div {
+  border-color: #1F7A1F !important;
+}

@@ -1,0 +1,802 @@
+---
+title: "rmarkdown"
+author: "Dookyung Kim"
+date: "2018-07-01"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+exclude: true
+
+```{r, message=FALSE, warning=FALSE, include=FALSE}
+options(
+  htmltools.dir.version = FALSE, # for blogdown
+  width = 80,
+  tibble.width = 80
+)
+
+library(emo)
+htmltools::tagList(rmarkdown::html_dependency_font_awesome())
+
+library(magrittr)
+```
+
+---
+class: middle, center
+
+# Rmarkdown Definitive Guide
+
+
+
+
+---
+## Why Reproducible Research ? 
+
+"A reproducible workflow" by Ignasi Bartomeus and Francisco Rodríguez-Sánchez (https://youtu.be/s3JldKoA0zw).
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/s3JldKoA0zw?rel=0" frameborder="0" allowfullscreen></iframe>
+
+
+
+---
+## Rmarkdown : Simple Example
+
+
+```{r include=FALSE}
+b = '`r b[1]`'  # an ugly hack; don't look at me
+```
+
+```yaml
+---
+title: "Hello R Markdown"
+author: "Awesome Me"
+date: "2018-02-14"
+output: html_document
+---
+```
+````markdown
+This is a paragraph in an R Markdown document.
+
+Below is a code chunk:
+
+`r ''````{r}
+fit = lm(dist ~ speed, data = cars)
+b   = coef(fit)
+plot(cars)
+abline(fit)
+```
+
+The slope of the regression is `r b[1]`.
+```
+````
+---
+## Example applications
+
+### Airbnb's knowledge repository
+
+Airbnb uses R Markdown to document all their analyses in R, so they can combine code and data visualizations in a single report [@bion2018]. Eventually all reports are carefully peer-reviewed and published to a company knowledge repository, so that anyone in the company can easily find analyses relevant to their team. Data scientists are also able to learn as much as they want from previous work or reuse the code written by previous authors, because the full R Markdown source is available in the repository.
+
+---
+### Homework assignments on [RPubs](https://RPubs.com)
+
+```{r rpubs, echo=FALSE, fig.cap='A screenshot of RPubs.com that contains some homework assginments submitted by students.', out.width='90%'}
+knitr::include_graphics('imgs/rpubs.png', dpi = NA)
+```
+
+---
+### Personalized mail
+
+Mine Çetinkaya-Rundel once wanted to create personalized handouts for her workshop participants. She used a template R Markdown file, and knitted it in a for-loop to generate 20 PDF files for the 20 participants. Each PDF contained both personalized information and common information. You may read the article https://rmarkdown.rstudio.com/articles_mail_merge.html for the technical details.
+
+---
+### 2017 Employer Health Benefits Survey
+
+The [2017 Employer Health Benefits Survey](https://www.kff.org/health-costs/report/2017-employer-health-benefits-survey/) was designed and analyzed by the Kaiser Family Foundation, NORC at the University of Chicago, and Health Research & Educational Trust. The full PDF report was written in R Markdown (with the **bookdown** package). 
+
+
+
+---
+### Journal articles
+
+Chris Hartgerink explained how and why he used R Markdown to write dynamic research documents in the post at https://elifesciences.org/labs/cad57bcf/composing-reproducible-manuscripts-using-r-markdown. 
+
+---
+### Dashboards at eelloo
+
+R Markdown is used at eelloo (https://eelloo.nl) to design and generate research reports. Here is one of their examples (in Dutch): https://eelloo.nl/groepsrapportages-met-infographics/, where you can find gauges, bar charts, pie charts, wordclouds, and other types of graphs dynamically generated and embedded in dashboards.
+
+---
+### Books 
+
+The **bookdown** package allows you to write books and long-form reports with multiple Rmd files. You can find a subset of them at https://bookdown.org. Some of these books have been printed, and some only have free online versions.
+
+---
+### Websites {#examples-websites}
+
+The **blogdown** package can be used to build general-purpose websites (including blogs and personal websites) based on R Markdown. You may find tons of examples at https://github.com/rbind or by searching on Twitter: https://twitter.com/search?q=blogdown. Here are a few impressive websites that I can quickly think of off the top of my head:
+
+- Rob J Hyndman's personal website: https://robjhyndman.com (a very comprehensive academic website).
+
+- Amber Thomas's personal website: https://amber.rbind.io (a rich project portfolio).
+
+- Emi Tanaka's personal website: https://emitanaka.github.io (in particular, check out the beautiful showcase page).
+
+- "Live Free or Dichotomize" by Nick Strayer and Lucy D'Agostino McGowan: http://livefreeordichotomize.com (the layout is elegant, and the posts are useful and practical).
+
+---
+## Compile an R Markdown document
+
+The usual way to compile an R Markdown document is to click the `Knit` button, and the corresponding keyboard shortcut is `Ctrl + Shift + K` (`Cmd + Shift + K` on macOS). 
+
+If you must render a document in the current R session, you can also call `rmarkdown::render()` by yourself, and pass the path of the Rmd file to this function.
+
+```yaml
+output:
+  html_document:
+    toc: true
+  pdf_document:
+    keep_tex: true
+```
+
+You can render it to PDF via:
+
+```r
+rmarkdown::render('foo.Rmd', 'pdf_document')
+```
+---
+## Cheat sheets
+
+RStudio has created a large number of cheat sheets, including the one-page R Markdown cheetahs, which are freely available at https://www.rstudio.com/resources/cheatsheets/. 
+
+---
+## Output formats
+
+All available **rmarkdown** formats are listed below:
+
+`r knitr::combine_words(grep('^[^_]+_(document|presentation)$', ls(asNamespace('rmarkdown')), value = TRUE), sep = '\n', and = '', before = '- \x60', after = '\x60')`
+
+---
+### Output formats : YAML header
+
+For the output format names in the YAML metadata of an Rmd file, you need to include the package name if a format is from an extension package, e.g.,
+
+```yaml
+output: tufte::tufte_html
+```
+
+If the format is from the **rmarkdown** package, you do not need the `rmarkdown::` prefix (although it will not hurt).
+
+Each output format is often accompanied with several format options. 
+
+```yaml
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    dev: 'svg'
+```
+---
+### Output formats : YAML header
+
+If a certain option has sub-options (which means the value of this option is a list in R), the sub-options need to be further indented, e.g.,
+
+```yaml
+output:
+  html_document:
+    toc: true
+    includes:
+      in_header: header.html
+      before_body: before.html
+```
+
+Some options are passed to **knitr**, such as `dev`, `fig_width`, and `fig_height`. Detailed documentation of these options can be found on the **knitr** documentation page: https://yihui.name/knitr/options/. 
+
+
+---
+## Markdown syntax
+
+The text in an R Markdown document is written with the Markdown syntax\index{Markdown syntax}. Precisely speaking, it is Pandoc's Markdown. There are many flavors of Markdown invented by different people, and Pandoc's flavor is the most comprehensive one to our knowledge. You can find the full documentation of Pandoc's Markdown at https://pandoc.org/MANUAL.html. 
+
+---
+### Inline formatting
+
+    -  _italic_ :  `_text_` or `*text*`
+    -  **Bold** : `**text**`
+    -  $H_3PO_4$ : `$H_3PO_4$`
+    -  $Cu^{2+}$ : `Cu^{2+}`
+    -  ~~strikethrough~~ : `~~strikethrough~~` 
+    -  [link](www.rstudio.com) : `[link](www.rstudio.com)`  
+    -  images: `![alt text or image title](path/to/image)`
+    -  Footnotes : `^[This is footnote.]`
+    -  `inline code` : use backticks `` `code` ``
+    -  To include $n$ literal backticks, use at least $n+1$ backticks outside.
+
+
+
+---
+### citation
+
+Use BibTeX databases, because they work better when the output format is LaTeX/PDF. 
+
+`@xie2016` 
+
+BibTeX files:
+
+```bibtex
+@Manual{R-base,
+  title = {R: A Language and Environment for Statistical
+    Computing},
+  author = {{R Core Team}},
+  organization = {R Foundation for Statistical Computing},
+  address = {Vienna, Austria},
+  year = {2017},
+  url = {https://www.R-project.org/},
+}
+```
+
+---
+### Block-level elements
+
+```markdown
+# First-level header
+
+## Second-level header
+
+### Third-level header
+```
+
+If you do not want a certain heading to be numbered, you can add `{-}`  after the heading, e.g.,
+
+```markdown
+# Preface {-}
+```
+---
+### list
+
+Unordered list items start with `*`, `-`, or `+`, and you can nest one list within another list by indenting the sub-list:
+
+```markdown
+- one item
+- one item
+- one item
+    - one more item
+    - one more item
+    - one more item
+```
+
+Ordered list items start with numbers (you can also nest lists within lists), e.g.,
+
+```markdown
+1. the first item
+2. the second item
+3. the third item
+    - one unordered item
+    - one unordered item
+```
+---
+### Blockquots : `>`
+
+```markdown
+> "I thoroughly disapprove of duels. If a man should challenge me,
+  I would take him kindly and forgivingly by the hand and lead him
+  to a quiet place and kill him."
+>
+> --- Mark Twain
+```
+
+---
+### Plain code
+
+Plain code blocks can be written after three or more backticks, and you can also indent the blocks by four spaces, e.g.,
+
+````markdown
+```
+This text is displayed verbatim / preformatted
+```
+
+Or indent by four spaces:
+
+    This text is displayed verbatim / preformatted
+````
+
+---
+### Math expressions
+
+Inline LaTeX equations\index{LaTeX math} can be written in a pair of dollar signs using the LaTeX syntax, e.g., `$f(k) = {n \choose k} p^{k} (1-p)^{n-k}$` (actual output: $f(k)={n \choose k}p^{k}(1-p)^{n-k}$); math expressions of the display style can be written in a pair of double dollar signs, e.g., `$$f(k) = {n \choose k} p^{k} (1-p)^{n-k}$$`, and the output looks like this:
+
+$$f\left(k\right)=\binom{n}{k}p^k\left(1-p\right)^{n-k}$$
+
+You can also use math environments inside `$ $` or `$$ $$`, e.g.,
+
+
+---
+### Array
+
+```latex
+$$\begin{array}{ccc}
+x_{11} & x_{12} & x_{13}\\
+x_{21} & x_{22} & x_{23}
+\end{array}$$
+```
+
+$$\begin{array}{ccc}
+x_{11} & x_{12} & x_{13}\\
+x_{21} & x_{22} & x_{23}
+\end{array}$$
+
+```latex
+$$X = \begin{bmatrix}1 & x_{1}\\
+1 & x_{2}\\
+1 & x_{3}
+\end{bmatrix}$$
+```
+
+$$X = \begin{bmatrix}1 & x_{1}\\
+1 & x_{2}\\
+1 & x_{3}
+\end{bmatrix}$$
+
+---
+### matrix
+
+```latex
+$$\Theta = \begin{pmatrix}\alpha & \beta\\
+\gamma & \delta
+\end{pmatrix}$$
+```
+
+$$\Theta = \begin{pmatrix}\alpha & \beta\\
+\gamma & \delta
+\end{pmatrix}$$
+
+```latex
+$$\begin{vmatrix}a & b\\
+c & d
+\end{vmatrix}=ad-bc$$
+```
+
+$$\begin{vmatrix}a & b\\
+c & d
+\end{vmatrix}=ad-bc$$
+
+---
+
+## R code chunks and inline R code {#r-code}
+
+You can insert an R code chunk either using the RStudio toolbar (the `Insert` button) or the keyboard shortcut `Ctrl + Alt + I` (`Cmd + Option + I` on macOS).
+
+````markdown
+`r ''````{r, chunk-label, results='hide', fig.height=4}
+````
+
+The value of a chunk option can be an arbitrary R expression, which makes chunk options extremely flexible. For example, the chunk option `eval` controls whether to evaluate (execute) a code chunk, and you may conditionally evaluate a chunk via a variable defined previously, e.g.,
+
+````markdown
+`r ''````{r}
+# execute code if the date is later than a specified day
+do_it = Sys.Date() > '2018-02-14'
+```
+
+`r ''````{r, eval=do_it}
+x = rnorm(100)
+```
+````
+
+---
+### code chunks options
+
+- `eval`: Whether to evaluate a code chunk.
+
+- `echo`: Whether to echo the source code in the output document.
+
+- `results`: When set to `'hide'`, text output will be hidden; when set to `'asis'`, text output is written "as-is".
+
+- `collapse`: Whether to merge text output and source code into a single code block in the output. 
+
+- `warning`, `message`, and `error`: Whether to show warnings, messages, and errors in the output document. Note that if you set `error = FALSE`, `rmarkdown::render()` will halt on error in a code chunk, and the error will be displayed in the R console. Similarly, when `warning = FALSE` or `message = FALSE`, these messages will be shown in the R console.
+
+- `include`: Whether to include anything from a code chunk in the output document. When `include = FALSE`, this whole code chunk is excluded in the output, but note that it will still be evaluated if `eval = TRUE`. When you are trying to set `echo = FALSE`, `results = 'hide'`, `warning = FALSE`, and `message = FALSE`, chances are you simply mean a single option `include = FALSE` instead of suppressing different types of text output individually.
+
+- `cache`: Whether to enable caching. If caching is enabled, the same code chunk will not be evaluated the next time the document is compiled (if the code chunk was not modified), which can save you time. However, I want to honestly remind you of the two hard problems in computer science (via Phil Karlton): naming things, and cache invalidation. Caching can be handy but also tricky sometimes.
+
+- `fig.width` and `fig.height`: The (graphical device) size of R plots in inches. R plots in code chunks are first recorded via a graphical device in **knitr**, and then written out to files. You can also specify the two options together in a single chunk option `fig.dim`, e.g., `fig.dim = c(6, 4)` means `fig.width = 6` and `fig.height = 4`.
+
+- `out.width` and `out.height`: The output size of R plots in the output document. These options may scale images. You can use percentages, e.g., `out.width = '80%'` means 80% of the page width.
+
+- `fig.align`: The alignment of plots. It can be `'left'`, `center`, or `'right'`.
+
+- `dev`: The graphical device to record R plots. Typically it is `'pdf'` for LaTeX output, and `'png'` for HTML output, but you can certainly use other devices, such as `'svg'` or `'jpeg'`.
+
+- `fig.cap`: The figure caption.
+
+- `child`: You can include a child document in the main document. This option takes a path to an external file.
+
+
+---
+### chunk label
+
+There is an optional chunk option that does not take any value, which is the chunk label. It should be the first option in the chunk header. Chunk labels are mainly used in filenames of plots and cache. If the label of a chunk is missing, a default one of the form `unnamed-chunk-i` will be generated, where `i` is incremental. I strongly recommend that you only use alphanumeric characters (`a-z`, `A-Z` and `0-9`) and dashes (`-`) in labels, because they are not special characters and will surely work for all output formats. Other characters, spaces and underscores in particular, may cause trouble in certain packages, such as **bookdown**.
+
+If a certain option needs to be frequently set to a value in multiple code chunks, you can consider setting it globally in the first code chunk of your document, e.g.,
+
+````markdown
+`r ''````{r, setup, include=FALSE}
+knitr::opts_chunk$set(fig.width = 8, collapse = TRUE)
+```
+````
+
+Besides code chunks, you can also insert values of R objects inline in text.\index{inline R expression} For example:
+
+````markdown
+`r ''````{r}
+x = 5  # radius of a circle
+```
+
+For a circle with the radius `r '\x60r x\x60'`,
+its area is `r '\x60r pi * x^2\x60'`.
+````
+
+---
+### Figures
+
+By default, figures produced by R code will be placed immediately after the code chunk they were generated from. For example:
+
+```{markdown}
+`r ```{r}
+plot(cars, pch = 18)
+``` `
+```
+
+You can provide a figure caption using `fig.cap` in the chunk options. 
+
+`fig.pos = 'h'`
+
+See https://www.sharelatex.com/learn/Positioning_images_and_tables for possible values of `fig.pos` 
+
+
+---
+### Figures
+
+To place multiple figures side-by-side from the same code chunk, you can use the `fig.hold='hold'` option along with the `out.width` option. Figure shows an example with two plots, each with a width of `50%`.
+
+```{r hold-position, fig.cap='Two plots side-by-side.', fig.show='hold', out.width='50%', fig.width=5, fig.height=4}
+par(mar = c(4, 4, .2, .1))
+plot(cars, pch = 19)
+plot(pressure, pch = 17)
+```
+
+to include a graphic that is not generated from R code:
+
+````{markdown}
+`r ```{r, out.width='25%', fig.align='center', fig.cap='...'}
+knitr::include_graphics('images/hex-rmarkdown.png')
+``` `
+````
+
+```{r include-graphics, echo=FALSE, fig.cap='The R Markdown hex logo.', out.width='25%', fig.align='center'}
+knitr::include_graphics('images/hex-rmarkdown.png')
+```
+
+---
+### Tables
+
+The easiest way to include tables\index{tables} is by using `knitr::kable()`:
+
+There are several other packages for producing tables, including **xtable**, **Hmisc**, and **stargazer**.
+
+````{markdown}
+`r ```{r tables-mtcars}
+knitr::kable(iris[1:5, ], caption = 'A caption')
+``` `
+````
+
+passing `longtable = TRUE` to `kable()`.
+
+If you are looking for more advanced control of the styling of tables, you are recommended to use the [**kableExtra**](https://cran.r-project.org/package=kableExtra) package, which provides functions to customize the appearance of PDF and HTML tables. 
+
+
+--- 
+## Other language engines (1)
+
+A less well-known fact about R Markdown is that many other languages are also supported, such as Python, Julia, C++, and SQL. 
+
+Available engines :
+
+```{r all-engines}
+names(knitr::knit_engines$get())
+```
+
+Most engines have been documented in Chapter 11 of @xie2015. 
+
+To use a different language engine, you can change the language name in the chunk header from `r` to the engine name, e.g.,
+
+````{markdown}
+`r ```{python}
+x = 'hello, python world!'
+print(x.split(' '))
+``` `
+````
+
+---
+### Other language engines (2)
+
+If you want to use an alternative interpreter, you may specify its path in the chunk option `engine.path`. For example, you may want to use Python 3 instead of the default Python 2, and we assume Python 3 is at `/usr/bin/python3` :
+
+````{markdown}
+`r ```{python, engine.path = '/usr/bin/python3'}
+import sys
+print(sys.version)
+``` `
+````
+
+You can also change the engine interpreters globally for multiple engines, e.g.,
+
+```{r engine-path, eval=FALSE, tidy=FALSE}
+knitr::opts_chunk$set(engine.path = list(
+  python = '~/anaconda/bin/python',
+  ruby = '/usr/local/bin/ruby'
+))
+```
+
+---
+### Other language engines (3)
+
+Most engines will execute each code chunk in a separate new session (via a `system()` call in R), which means objects created in memory in a previous code chunk will not be directly available to latter code chunks. For example, if you create a variable in a `bash` code chunk, you will not be able to use it in the next `bash` code chunk. 
+
+Currently the only exceptions are `r`, `python`, and `julia`. Only these engines execute code in the same session throughout the document. 
+
+To clarify, all `r` code chunks are executed in the same R session, all `python` code chunks are executed in the same Python session, and so on, but _the R session and the Python session are independent_.^[This is not strictly true, since the Python session is actually launched from R. 
+
+---
+### Python
+
+The `python` engine is based on the **reticulate** package, which makes it possible to execute all Python code chunks in the same Python session. If you actually want to execute a certain code chunk in a new Python session, you may use the chunk option `python.reticulate = FALSE`. If you are using a **knitr** version lower than 1.18, you should update your R packages.
+
+Below is a relatively simple example that shows how you can create/modify variables, and draw graphics in Python code chunks. Values can be passed to or retrieved from the Python session. To pass a value to Python, assign to `py$name`, where `name` is the variable name you want to use in the Python session; to retrieve a value from Python, also use `py$name`.
+
+---
+### Example
+
+````markdown
+`r xfun::file_string('examples/python.Rmd')`
+````
+
+You may learn more about the **reticulate** package from https://rstudio.github.io/reticulate/.
+
+---
+### Shell scripts
+
+You can also write Shell scripts in R Markdown.
+
+ Usually this is not a problem for Linux or macOS users. It is not impossible for Windows users to run Shell scripts, but you will have to install additional software (such as [Cygwin](https://www.cygwin.com) or the Linux Subsystem).
+
+````{markdown}
+`r ```{bash}
+echo "Hello Bash!"
+cat flights1.csv flights2.csv flights3.csv > flights.csv
+``` `
+````
+
+Shell scripts are executed via the `system2()` function in R. Basically **knitr** passes a code chunk to the command `bash -c` to run it.
+
+---
+### SQL
+
+The `sql` engine uses the [**DBI**](https://cran.rstudio.com/package=DBI) package to execute SQL\index{SQL} queries, print their results, and optionally assign the results to a data frame.
+
+To use the `sql` engine, you first need to establish a DBI connection to a database (typically via the `DBI::dbConnect()` function). You can make use of this connection in a `sql` chunk via the `connection` option. For example:
+
+````markdown
+`r ''````{r}
+library(DBI)
+db = dbConnect(RSQLite::SQLite(), dbname = "sql.sqlite")
+```
+
+`r ''````{sql, connection=db}
+SELECT * FROM trials
+```
+````
+
+By default, `SELECT` queries will display the first 10 records of their results within the document. The number of records displayed is controlled by the `max.print` option, which is in turn derived from the global **knitr** option `sql.max.print` (e.g., `knitr::opts_knit$set(sql.max.print = 10)`; N.B. it is `opts_knit` instead of `opts_chunk`). For example, the following code chunk displays the first 20 records:
+
+````markdown
+`r ''````{sql, connection=db, max.print = 20}
+SELECT * FROM trials
+```
+````
+
+You can specify no limit on the records to be displayed via `max.print = -1` or `max.print = NA`.
+
+By default, the `sql` engine includes a caption that indicates the total number of records displayed. You can override this caption using the `tab.cap` chunk option. For example:
+
+````markdown
+`r ''````{sql, connection=db, tab.cap = "My Caption"}
+SELECT * FROM trials
+```
+````
+
+You can specify that you want no caption all via `tab.cap = NA`.
+
+If you want to assign the results of the SQL query to an R object as a data frame, you can do this using the `output.var` option, e.g.,
+
+````markdown
+`r ''````{sql, connection=db, output.var="trials"}
+SELECT * FROM trials
+```
+````
+
+When the results of a SQL query are assigned to a data frame, no records will be printed within the document (if desired, you can manually print the data frame in a subsequent R chunk).
+
+If you need to bind the values of R variables into SQL queries, you can do so by prefacing R variable references with a `?`. For example:
+
+````markdown
+`r ''````{r}
+subjects = 10
+```
+
+`r ''````{sql, connection=db, output.var="trials"}
+SELECT * FROM trials WHERE subjects >= ?subjects
+```
+````
+
+If you have many SQL chunks, it may be helpful to set a default for the `connection` chunk option in the setup chunk, so that it is not necessary to specify the connection on each individual chunk. You can do this as follows:
+
+````markdown
+`r ''````{r setup}
+library(DBI)
+db = dbConnect(RSQLite::SQLite(), dbname = "sql.sqlite")
+knitr::opts_chunk$set(connection = "db")
+```
+````
+
+Note that the `connection` option should be a string naming the connection object (not the object itself). Once set, you can execute SQL chunks without specifying an explicit connection:
+
+````markdown
+`r ''````{sql}
+SELECT * FROM trials
+```
+````
+
+### Rcpp
+
+The `Rcpp` engine enables compilation of C++\index{C++} into R functions via the **Rcpp** `sourceCpp()` function. For example:
+
+````markdown
+`r ''````{Rcpp}
+#include <Rcpp.h>
+using namespace Rcpp;
+
+// [[Rcpp::export]]
+NumericVector timesTwo(NumericVector x) {
+  return x * 2;
+}
+```
+````
+
+Executing this chunk will compile the code and make the C++ function `timesTwo()` available to R.
+
+You can cache the compilation of C++ code chunks using standard **knitr** caching, i.e., add the `cache = TRUE` option to the chunk:
+
+````markdown
+`r ''````{Rcpp, cache=TRUE}
+#include <Rcpp.h>
+using namespace Rcpp;
+
+// [[Rcpp::export]]
+NumericVector timesTwo(NumericVector x) {
+  return x * 2;
+}
+```
+````
+
+In some cases, it is desirable to combine all of the `Rcpp` code chunks in a document into a single compilation unit. This is especially useful when you want to intersperse narrative between pieces of C++ code (e.g., for a tutorial or user guide). It also reduces total compilation time for the document (since there is only a single invocation of the C++ compiler rather than multiple).
+
+To combine all Rcpp chunks into a single compilation unit, you use the `ref.label` chunk option along with the `knitr::all_rcpp_labels()` function to collect all of the `Rcpp` chunks in the document. Here is a simple example:
+
+````markdown
+All C++ code chunks will be combined to the chunk below:
+
+`r ''````{Rcpp, ref.label=knitr::all_rcpp_labels(), include=FALSE}
+```
+
+First we include the header `Rcpp.h`:
+
+`r ''````{Rcpp, eval=FALSE}
+#include <Rcpp.h>
+```
+
+Then we define a function:
+
+`r ''````{Rcpp, eval=FALSE}
+// [[Rcpp::export]]
+int timesTwo(int x) {
+  return x * 2;
+}
+```
+````
+
+The two `Rcpp` chunks that include code will be collected and compiled together in the first `Rcpp` chunk via the `ref.label` chunk option. Note that we set the `eval = FALSE` option on the `Rcpp` chunks with code in them to prevent them from being compiled again.
+
+### Stan
+
+The `stan` engine enables embedding of the [Stan probabilistic programming language](http://mc-stan.org)\index{Stan} within R Markdown documents.
+
+The Stan model within the code chunk is compiled into a `stanmodel` object, and is assigned to a variable with the name given by the `output.var` option. For example:
+
+````markdown
+`r ''````{stan, output.var="ex1"}
+parameters {
+  real y[2];
+}
+model {
+  y[1] ~ normal(0, 1);
+  y[2] ~ double_exponential(0, 2);
+}
+```
+
+`r ''````{r}
+library(rstan)
+fit = sampling(ex1)
+print(fit)
+```
+````
+
+### JavaScript and CSS
+
+If you are using an R Markdown format that targets HTML output (e.g., `html_document` and `ioslides_presenation`, etc.), you can include JavaScript\index{JavaScript} to be executed within the HTML page using the JavaScript engine named `js`.
+
+For example, the following chunk uses jQuery (which is included in most R Markdown HTML formats) to change the color of the document title to red:
+
+````markdown
+`r ''````{js, echo=FALSE}
+$('.title').css('color', 'red')
+```
+````
+
+Similarly, you can embed CSS\index{CSS} rules in the output document. For example, the following code chunk turns text within the document body red:
+
+````markdown
+`r ''````{css, echo=FALSE}
+body {
+  color: red;
+}
+```
+````
+
+Without the chunk option `echo = FALSE`, the JavaScript/CSS code will be displayed verbatim in the output document, which is probably not what you want.
+
+### Julia
+
+The [Julia](https://julialang.org) language \index{Julia} is supported through the **JuliaCall** package [@R-JuliaCall]. Similar to the `python` engine, the `julia` engine runs all Julia code chunks in the same Julia session. Below is a minimal example:
+
+````markdown
+`r ''````{julia}
+a = sqrt(2);  # the semicolon inhibits printing
+```
+````
+
+### C and Fortran
+
+For code chunks that use C\index{C language} or Fortran\index{Fortran}, **knitr** uses `R CMD SHLIB` to compile the code, and load the shared object (a `*.so` file on Unix or `*.dll` on Windows). Then you can use `.C()` / `.Fortran()` to call the C / Fortran functions, e.g.,
+
+````markdown
+`r ''````{c, test-c, results='hide'}
+void square(double *x) {
+  *x = *x * *x;
+}
+```
+
+Test the `square()` function:
+
+`r ''````{r}
+.C('square', 9)
+.C('square', 123)
+```
+````
+
+You can find more examples on different language engines in the GitHub repository https://github.com/yihui/knitr-examples (look for filenames that contain the word "engine").
