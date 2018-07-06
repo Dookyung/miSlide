@@ -1,0 +1,63 @@
+---
+title: "r-tips"
+author: "Dookyung Kim"
+date: "2018-07-05"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+exclude: true
+
+```{r, message=FALSE, warning=FALSE, include=FALSE}
+options(
+  htmltools.dir.version = FALSE, # for blogdown
+  width = 80,
+  tibble.width = 80
+)
+
+library(emo)
+htmltools::tagList(rmarkdown::html_dependency_font_awesome())
+
+library(magrittr)
+```
+
+---
+class: middle, center
+
+# R Tips
+
+
+
+
+---
+## broken packages reinstall
+
+```
+broken = names(which(
+  sapply(rownames(installed.packages()), function(i) {
+    system2('Rscript', c('-e', shQuote(sprintf('library(%s)', i))))
+  }) != 0
+))
+if (length(broken)) install.packages(broken)
+```
+
+---
+## Generate a photo-gallery README for a directory of figs
+
+`README`-only repos vs gists : 
+
+  * [PNGs README gallery](https://github.com/Reproducible-Science-Curriculum/rr-organization1/tree/27883c8fc4cdd4dcc6a8232f1fe5c726e96708a0/slides/organization-slides) 
+
+
+`�``{r, results ="asis"}
+
+fig_files <- dir(pattern = "jpg$") 
+paste0("* ", fig_files, " ![]](", fig_files, ")\n")
+`�``
+
+
